@@ -1,0 +1,14 @@
+
+.card{
+    padding: 2rem; 
+    height:100%; 
+    color:black;
+}
+
+.card-img{
+    object-fit: contain;
+    cursor:pointer; 
+    width:200px; 
+    height:200px; 
+    align-self: center
+}
