@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, ListGroup, Row } from 'react-bootstrap';
+import { Button, Card, Carousel, Col, ListGroup, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { addCartThunk } from '../store/slices/cartProducts.slice';
@@ -31,28 +31,53 @@ const ProductDetail = () => {
     }
 
     useEffect(() => {
-       setCount(5)
+        setCount(5)
     }, [id])
 
     return (
         <>
-        <Row className="mb-5">
-            <Col>
-                <h1>{product?.title}</h1>
-                <p>PRODUCTO {id}</p>
-            <Button
-            onClick={()=>setCount(count-1)}>-</Button>
-            {count}
-            <Button onClick={()=>setCount(count+1)}>+</Button>
-            <Button onClick={buyProduct}>Add to Cart</Button>
-            </Col>
-        </Row>
+            <Carousel className="mb-3" style={{ padding: '1rem', backgroundColor: '#fff' }}>
+                <Carousel.Item>
+                    <img
+                        className="d-block w-100"
+                        src={product.productImgs[0]}
+
+                    />
+                </Carousel.Item>
+                <Carousel.Item>
+                    <img
+                        className="d-block w-100"
+                        src={product.productImgs[1]}
+                        alt="Second slide"
+                    />
+                </Carousel.Item>
+                <Carousel.Item>
+                    <img
+                        className="d-block w-100"
+                        src={product.productImgs[2]}
+                        alt="Third slide"
+                    />
+                </Carousel.Item>
+            </Carousel>
+            <Row className="mb-5">
+                <Col>
+                    <h1>{product?.title}</h1>
+                    <p>{product.description}</p>
+                    <p>price: {product.price}</p>
+                    <p>Quantity</p>
+                    <Button
+                        onClick={() => setCount(count - 1)}>-</Button>
+                    {count}
+                    <Button onClick={() => setCount(count + 1)}>+</Button>
+                    <Button onClick={buyProduct}>Add to Cart</Button>
+                </Col>
+            </Row>
             <ListGroup variant="flush">
                 <p>Discover similar items</p>
                 <Row xs={1} md={2} className="g-4">
                     {
                         relatedProducts.map(e => (
-                            <Col className='col'  key={e?.title} >
+                            <Col className='col' key={e?.title} >
                                 <Card style={{ backgroundColor: '#fff' }} className='card'>
                                     <Card.Img className='card-img' onClick={() => navigate(`/products/${e.id}`)} variant="top" src={e.productImgs[0]} />
                                     <Card.Body>
@@ -66,9 +91,9 @@ const ProductDetail = () => {
                             </Col>
                         ))
                     }
-                    </Row> 
+                </Row>
             </ListGroup>
-          </>
+        </>
     );
 };
 

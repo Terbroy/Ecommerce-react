@@ -16,7 +16,7 @@ const Cart = ({handleClose, show}) => {
         //     setTotal(e.price+i.price)
         // })
 
-        const valor = cart.products.reduce((e,i)=>{
+        const valor = cart.products?.reduce((e,i)=>{
             return e += Number(i.quantity)
         }, 0)
 
