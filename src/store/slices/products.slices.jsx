@@ -11,15 +11,14 @@ export const productsSlice = createSlice({
             return actions.payload
         }
 
-
     }
 })
 
 export const getProductsThunk = ( ) => dispatch => {
     dispatch(isLoading(true))
- axios.get('https://ecommerce-api-react.herokuapp.com/api/v1/products')
-    .then(res => dispatch(setProducts(res.data.data.products)))
-    .finally(() => dispatch(isLoading(false)))
+        axios.get('https://e-commerce-api-v2.academlo.tech/api/v1/products/')
+            .then(res => dispatch(setProducts(res.data)))
+            .finally(() => dispatch(isLoading(false)))
 }
 
 export const { setProducts } = productsSlice.actions;

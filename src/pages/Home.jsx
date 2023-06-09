@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Accordion, CardGroup, Col, Row, Card } from 'react-bootstrap';
-import { addCartThunk } from '../store/slices/cartProducts.slice';
+import { addCartThunk, updateCartThunk } from '../store/slices/cartProducts.slice';
 import '../styles/home.css'
 
 const Home = () => {
@@ -15,16 +15,34 @@ const Home = () => {
     const [filtered, setFiltered] = useState([])
     const [search, setSearch] = useState('')
     const productsList = useSelector(state => state.products)
+    const cart = useSelector(state => state.cart)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
 
     useEffect(() => {
         dispatch(getProductsThunk())
         axios
-            .get('https://ecommerce-api-react.herokuapp.com/api/v1/products/categories')
-            .then(res => setCategories(res.data.data.categories))
+            .get('https://e-commerce-api-v2.academlo.tech/api/v1/categories/')
+            .then(res => setCategories(res.data))
     }, [])
+
+
+    const buyProduct = (id) => {
+        let productSelected = cart.filter(e => e.productId === id)
+        if(productSelected.length>0){
+            let totalQuantity= 1 + productSelected[0].quantity
+            const updateProduct = {
+                quantity : totalQuantity
+            }
+            dispatch(updateCartThunk(productSelected[0].id, updateProduct))
+        }else{
+            const addProduct = {
+                quantity: 1,
+                productId: id
+            }
+            dispatch(addCartThunk(addProduct))
+        }
+    }
 
     useEffect(() => {
         setFiltered(productsList)
@@ -41,16 +59,6 @@ const Home = () => {
     }
     const allProducts = () => {
         setFiltered(productsList)
-    }
-
-    const addProduct = (id) => {
-
-        const addProduct = {
-            id: id,
-            quantity: 1
-        }
-
-        dispatch(addCartThunk(addProduct))
     }
 
     return (
@@ -86,13 +94,20 @@ const Home = () => {
                         {filtered.map(e => (
                             <Col className='col' key={e.id} >
                                 <Card style={{ backgroundColor: '#fff' }} className='card'>
-                                    <Card.Img className='card-img' onClick={() => navigate(`/products/${e.id}`)} variant="top" src={e.productImgs[0]} />
+                                    <Card.Img className='card-img' onClick={() => navigate(`/products/${e.id}/`)} variant="top" src={e.images[0].url} />
                                     <Card.Body>
-                                        <Card.Title style={{ color: 'black' }} >{e.title}</Card.Title>
+                                        <Card.Title
+                                            style={{ color: 'black' }} >{e.title}
+                                        </Card.Title>
                                         <Card.Text>
-                                            <small>Price: {e.price}</small>
+                                            <small>
+                                                Price: {e.price}
+                                            </small>
                                         </Card.Text>
-                                        <Button onClick={() => addProduct(e.id)}>Add to Cart</Button>
+                                        <Button
+                                            onClick={() => buyProduct(e.id)}>
+                                            Add to Cart
+                                        </Button>
                                     </Card.Body>
                                 </Card>
                             </Col>

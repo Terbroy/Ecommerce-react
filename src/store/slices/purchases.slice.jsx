@@ -13,10 +13,10 @@ export const purchasesSlice = createSlice({
     }
 })
 
-export const purchasesThunk = ( ) => dispatch => {
+export const purchasesThunk = ( ) => async dispatch => {
     dispatch(isLoading(true));
-    return axios.get('https://ecommerce-api-react.herokuapp.com/api/v1/purchases/', getConfig())
-        .then(res => dispatch(setPurchases(res.data.data.purchases)))
+    return await axios.get('https://e-commerce-api-v2.academlo.tech/api/v1/purchases/', getConfig())
+        .then(res => dispatch(setPurchases(res.data)))
         .finally(() => dispatch(isLoading(false)))
 }
 
